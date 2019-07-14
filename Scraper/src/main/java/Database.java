@@ -32,7 +32,7 @@ public class Database {
     MongoIterable<String> collectionNames = db.listCollectionNames();
     try (final MongoCursor<String> it = collectionNames.iterator()) {
       while (it.hasNext()) {
-        if (it.next().equalsIgnoreCase(commentCollectionName)) {
+        if (it.next().equalsIgnoreCase(collectionName)) {
           return true;
         }
       }
