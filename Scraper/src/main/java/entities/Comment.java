@@ -1,4 +1,4 @@
-package scraper;
+package entities;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -17,7 +17,7 @@ public class Comment {
     }
 
     public String get_id() {
-        return _id.toHexString();
+        return _id == null ? "" : _id.toHexString();
     }
 
     public void set_id(ObjectId _id) {

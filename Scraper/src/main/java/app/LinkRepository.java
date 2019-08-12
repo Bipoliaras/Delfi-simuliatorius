@@ -1,4 +1,4 @@
-package scraper;
+package app;
 
 import entities.Link;
 import org.bson.types.ObjectId;

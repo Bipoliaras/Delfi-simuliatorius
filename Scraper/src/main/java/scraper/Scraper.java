@@ -2,6 +2,12 @@ package scraper;
 
 import java.util.stream.Collectors;
 
+import app.CommentRepository;
+import app.HeadlineRepository;
+import app.LinkRepository;
+import entities.Comment;
+import entities.Headline;
+import entities.Link;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,12 +15,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.List;
 
 import org.openqa.selenium.chrome.ChromeOptions;
-import repositories.CommentRepository;
-import repositories.HeadlineRepository;
 
-public class Main {
+public class Scraper {
 
-    public Main(CommentRepository commentRepository, HeadlineRepository headlineRepository, LinkRepository linkRepository) {
+    public Scraper(CommentRepository commentRepository, HeadlineRepository headlineRepository, LinkRepository linkRepository) {
         this.commentRepository = commentRepository;
         this.headlineRepository = headlineRepository;
         this.linkRepository = linkRepository;
@@ -23,10 +27,10 @@ public class Main {
     public static final String websiteLink = "https://www.delfi.lt/";
 
     private CommentRepository commentRepository;
-
     private HeadlineRepository headlineRepository;
+    private LinkRepository linkRepository;
 
-    public void mainAction() {
+    public void scrape() {
 
         System.setProperty("webdriver.chrome.driver", "src\\main\\resources\\chromedriver.exe");
 
@@ -52,11 +56,12 @@ public class Main {
         driver.get(link);
 
 
+        linkRepository.save(new Link(link));
+
         //scrape article headline
 
         WebElement headline = ((ChromeDriver) driver).findElementByClassName("article-title");
-        commentRepository.save(new Headline(headline.getText()));
-
+        headlineRepository.save(new Headline(headline.getText()));
 
         //scrape all anonymous comments
         List<String> comments = ((ChromeDriver) driver).findElementsByClassName("comment-content")

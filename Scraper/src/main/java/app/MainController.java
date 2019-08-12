@@ -1,10 +1,13 @@
-package scraper;
+package app;
 
 import entities.Comment;
+import entities.Link;
+import entities.Story;
 import markov.Markov;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import scraper.Scraper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/comments/")
 public class MainController {
+
+    public static final int TOTAL_COMMENT_AMOUNT = 10;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -27,7 +32,6 @@ public class MainController {
     @RequestMapping(method = RequestMethod.GET)
     public Story getRandomStory() {
 
-
        Markov commentMarkov = new Markov();
 
        commentRepository.findAll().forEach(comment -> commentMarkov.parseText(comment.getComment()));
@@ -40,22 +44,20 @@ public class MainController {
 
        story.setHeadline(headlineMarkov.generate());
 
-//       story.setLink(linkRepository.find();
-
+       story.setLink(linkRepository.findAll().get(0));
 
        List<Comment> randomComments = new ArrayList<>();
 
-
+       for(int comment = 0; comment < TOTAL_COMMENT_AMOUNT; comment++) {
+           randomComments.add(new Comment(commentMarkov.generate()));
+       }
 
        story.setComments(randomComments);
 
 
+
+
        return story;
-
-
-
-
-
 
     }
 

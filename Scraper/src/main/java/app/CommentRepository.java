@@ -1,4 +1,4 @@
-package scraper;
+package app;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;

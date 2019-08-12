@@ -1,4 +1,4 @@
-package scraper;
+package markov;
 
 import java.util.HashMap;
 import java.util.Map;

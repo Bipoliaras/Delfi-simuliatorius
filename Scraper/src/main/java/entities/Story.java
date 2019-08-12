@@ -1,4 +1,4 @@
-package scraper;
+package entities;
 
 import entities.Comment;
 import entities.Link;
