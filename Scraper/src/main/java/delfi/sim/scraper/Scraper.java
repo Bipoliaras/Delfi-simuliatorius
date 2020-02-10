@@ -67,7 +67,7 @@ public class Scraper {
             WebElement headline = ((ChromeDriver) driver).findElementByClassName("article-title");
 
             headlineRepository.save(Headline.builder().headlineText(headline.getText()).build());
-
+            
             //scrape all anonymous comments
             List<Comment> comments = ((ChromeDriver) driver)
                 .findElementsByClassName("comment-content")
@@ -79,7 +79,7 @@ public class Scraper {
             commentRepository.saveAll(comments);
 
         } catch (Exception ex) {
-            System.out.println("Something shitty happened " + ex.getClass());
+            logger.debug(ex.toString());
         }
 
     }

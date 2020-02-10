@@ -1,7 +1,14 @@
 package delfi.sim.app;
 
+import delfi.sim.entities.Comment;
+import delfi.sim.entities.CommentRepository;
+import delfi.sim.entities.Headline;
+import delfi.sim.entities.HeadlineRepository;
 import delfi.sim.entities.Story;
 import delfi.sim.scraper.Scraper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +20,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/stories/")
 public class StoriesController {
 
-  private static final int TOTAL_COMMENT_AMOUNT = 10;
+  private static final int TOTAL_COMMENT_AMOUNT = 5;
 
   private Scraper scraper;
+
+  private CommentRepository commentRepository;
+
+  private HeadlineRepository headlineRepository;
+
+  private Random random = new Random();
+
+  @Autowired
+  public void setCommentRepository(CommentRepository commentRepository) {
+    this.commentRepository = commentRepository;
+  }
+
+  @Autowired
+  public void setHeadlineRepository(HeadlineRepository headlineRepository) {
+    this.headlineRepository = headlineRepository;
+  }
 
   @Autowired
   public void setScraper(Scraper scraper) {
@@ -25,32 +48,19 @@ public class StoriesController {
   @GetMapping
   public Story getRandomStory() {
 
-//    Markov commentMarkov = new Markov();
-//
-//    commentRepository.findAll().forEach(comment -> commentMarkov.parseText(comment.getComment()));
-//
-//    Markov headlineMarkov = new Markov();
-//
-//    headlineRepository.findAll()
-//        .forEach(headline -> headlineMarkov.parseText(headline.getHeadline()));
-//
-//    Story story = new Story();
-//
-//    story.setHeadline(headlineMarkov.generate());
-//
-//    story.setLink(linkRepository.findAll().get(0));
-//
-//    List<Comment> randomComments = new ArrayList<>();
-//
-//    for (int comment = 0; comment < TOTAL_COMMENT_AMOUNT; comment++) {
-//      randomComments.add(new Comment(commentMarkov.generate()));
-//    }
-//
-//    story.setComments(randomComments);
-//
-//    return story;
+    List<Headline> headlines = headlineRepository.findAll();
 
-    return new Story();
+    Headline randomHeadline = headlines.get(random.nextInt(headlines.size() - 1));
+
+    List<Comment> comments = commentRepository.findAll();
+
+    List<Comment> storyComments = new ArrayList<>();
+
+    for(int i = 0 ; i < TOTAL_COMMENT_AMOUNT; i++) {
+      storyComments.add(comments.get(random.nextInt(comments.size()-1)));
+    }
+
+    return Story.builder().comments(storyComments).headline(randomHeadline).build();
   }
 
   @PostMapping
