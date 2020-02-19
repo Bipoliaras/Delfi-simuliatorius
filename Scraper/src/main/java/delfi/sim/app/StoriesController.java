@@ -73,7 +73,7 @@ public class StoriesController {
 
     Image randomImage = imageLinks.get(random.nextInt(headlines.size() - 1));
 
-    return Story.builder().comments(storyComments).headline(randomHeadline).imageLink(randomImage).build();
+    return Story.builder().comments(storyComments).headline(randomHeadline).image(randomImage).build();
   }
 
   @PostMapping
