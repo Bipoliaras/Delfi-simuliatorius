@@ -4,6 +4,8 @@ import delfi.sim.entities.Comment;
 import delfi.sim.entities.CommentRepository;
 import delfi.sim.entities.Headline;
 import delfi.sim.entities.HeadlineRepository;
+import delfi.sim.entities.Image;
+import delfi.sim.entities.ImageRepository;
 import delfi.sim.entities.Story;
 import delfi.sim.scraper.Scraper;
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class StoriesController {
 
   private HeadlineRepository headlineRepository;
 
+  private ImageRepository imageRepository;
+
   private Random random = new Random();
 
   @Autowired
@@ -38,6 +42,11 @@ public class StoriesController {
   @Autowired
   public void setHeadlineRepository(HeadlineRepository headlineRepository) {
     this.headlineRepository = headlineRepository;
+  }
+
+  @Autowired
+  public void setImageRepository(ImageRepository imageRepository) {
+    this.imageRepository = imageRepository;
   }
 
   @Autowired
@@ -60,13 +69,16 @@ public class StoriesController {
       storyComments.add(comments.get(random.nextInt(comments.size()-1)));
     }
 
-    return Story.builder().comments(storyComments).headline(randomHeadline).build();
+    List<Image> imageLinks = imageRepository.findAll();
+
+    Image randomImage = imageLinks.get(random.nextInt(headlines.size() - 1));
+
+    return Story.builder().comments(storyComments).headline(randomHeadline).imageLink(randomImage).build();
   }
 
   @PostMapping
-  public void addComments() {
+  public void scrape() {
     scraper.scrape();
   }
-
 
 }
