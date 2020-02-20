@@ -14,14 +14,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "headline")
+@Entity(name = "t_headline")
 public class Headline {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "headline_text")
-    private String headlineText;
+    @Column(name = "title", length = 16384)
+    private String title;
 
+    @Column(name ="date", length = 16384)
+    private String date;
 }

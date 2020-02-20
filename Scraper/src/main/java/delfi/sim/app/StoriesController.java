@@ -11,6 +11,8 @@ import delfi.sim.scraper.Scraper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,25 +57,31 @@ public class StoriesController {
   }
 
   @GetMapping
-  public Story getRandomStory() {
+  public List<Story> getStories() {
+    return IntStream.range(0, 10).parallel().mapToObj(number -> getStory()).collect(Collectors.toList());
+  }
 
+  private Story getStory() {
     List<Headline> headlines = headlineRepository.findAll();
-
     Headline randomHeadline = headlines.get(random.nextInt(headlines.size() - 1));
 
     List<Comment> comments = commentRepository.findAll();
-
     List<Comment> storyComments = new ArrayList<>();
 
-    for(int i = 0 ; i < TOTAL_COMMENT_AMOUNT; i++) {
-      storyComments.add(comments.get(random.nextInt(comments.size()-1)));
-    }
+    IntStream
+        .range(0, TOTAL_COMMENT_AMOUNT)
+        .parallel()
+        .forEach(number -> storyComments.add(comments.get(random.nextInt(comments.size() - 1))));
 
     List<Image> imageLinks = imageRepository.findAll();
-
     Image randomImage = imageLinks.get(random.nextInt(headlines.size() - 1));
 
-    return Story.builder().comments(storyComments).headline(randomHeadline).image(randomImage).build();
+    return Story.builder()
+        .title(randomHeadline.getTitle())
+        .createdOn(randomHeadline.getDate())
+        .imageSrc(randomImage.getImageLink())
+        .comments(storyComments).build();
+
   }
 
   @PostMapping

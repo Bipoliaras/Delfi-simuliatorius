@@ -53,7 +53,6 @@ public class Scraper {
     this.commentEndpoint = commentEndpoint;
   }
 
-
   public void scrape() {
 
     try {
@@ -62,8 +61,7 @@ public class Scraper {
 
       List<String> links = new ArrayList<>();
 
-      doc
-          .select("a[href]")
+      doc.select("a[href]")
           .stream()
           .map(element -> element.attr("href"))
           .filter(link -> link.contains("&com=1"))
@@ -75,7 +73,7 @@ public class Scraper {
           });
 
       links.stream().map(
-          link -> link.substring(link.indexOf('=')+1)
+          link -> link.substring(link.indexOf('=') + 1)
       ).forEach(
           link ->
           {
@@ -85,19 +83,23 @@ public class Scraper {
       );
 
     } catch (Exception ex) {
-
+      logger.error(ex.toString());
     }
 
   }
 
-  public void scrapeHeadlinesAndImages(String link) {
+  private void scrapeHeadlinesAndImages(String link) {
 
     try {
 
       Document doc = Jsoup.connect(link).get();
 
+      String articleText = doc.select("div.article-title").text();
+
       headlineRepository.save(Headline.builder()
-          .headlineText(doc.select("div.article-title").text()).build());
+          .title(articleText.substring(0, articleText.indexOf('(')))
+          .date(doc.select("div.source-date").text())
+          .build());
 
       doc.select("div.image-article").stream()
           .map(element -> element.getElementsByClass("fancybox"))
@@ -106,7 +108,7 @@ public class Scraper {
           .forEach(imageLink -> imageRepository.save(Image.builder().imageLink(imageLink).build()));
 
     } catch (Exception ex) {
-
+      logger.error(ex.toString());
     }
 
   }

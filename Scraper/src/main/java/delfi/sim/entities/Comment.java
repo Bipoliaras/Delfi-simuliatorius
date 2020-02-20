@@ -14,14 +14,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "comment")
+@Entity(name = "t_comment")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @Column(name = "comment_text")
-    public String commentText;
+    @Column(name = "username", length = 16384)
+    public String username;
+
+    @Column(name = "comment_text", length = 16384)
+    public String text;
 
 }

@@ -7,6 +7,8 @@ import delfi.sim.entities.Comment;
 import delfi.sim.entities.CommentRepository;
 import java.util.Map;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +27,8 @@ public class CommentEndpoint {
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
   private CommentRepository commentRepository;
+
+  private Logger logger = LoggerFactory.getLogger(CommentEndpoint.class);
 
   @Autowired
   public void setCommentRepository(CommentRepository commentRepository) {
@@ -63,10 +67,12 @@ public class CommentEndpoint {
       JsonNode comments = jsonRoot.get("data").get("getCommentsByArticleId").get("comments");
 
       comments.elements().forEachRemaining(element -> commentRepository.save(Comment.builder()
-      .commentText(element.get("content").asText()).build()));
+          .username(element.get("subject").asText())
+          .text(element.get("content").asText())
+          .build()));
 
     } catch (Exception ex) {
-
+      logger.error(ex.toString());
     }
 
   }

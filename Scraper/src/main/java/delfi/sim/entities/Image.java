@@ -14,16 +14,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "image")
+@Entity(name = "t_image")
 public class Image {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Column(name = "image_link")
+  @Column(name = "image_link", length = 16384)
   private String imageLink;
-
-
 
 }

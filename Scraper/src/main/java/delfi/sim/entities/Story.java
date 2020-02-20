@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Story {
 
-    private Headline headline;
-
-    private Image image;
+    private String title;
+    private String createdOn;
+    private String imageSrc;
 
     private List<Comment> comments;
 
