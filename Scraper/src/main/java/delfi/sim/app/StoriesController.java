@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/stories/")
 public class StoriesController {
 
-  private static final int TOTAL_COMMENT_AMOUNT = 5;
+  private static final int TOTAL_COMMENT_AMOUNT = 7;
 
   private Scraper scraper;
 
@@ -33,8 +34,6 @@ public class StoriesController {
   private HeadlineRepository headlineRepository;
 
   private ImageRepository imageRepository;
-
-  private Random random = new Random();
 
   @Autowired
   public void setCommentRepository(CommentRepository commentRepository) {
@@ -62,25 +61,14 @@ public class StoriesController {
   }
 
   private Story getStory() {
-    List<Headline> headlines = headlineRepository.findAll();
-    Headline randomHeadline = headlines.get(random.nextInt(headlines.size() - 1));
 
-    List<Comment> comments = commentRepository.findAll();
-    List<Comment> storyComments = new ArrayList<>();
-
-    IntStream
-        .range(0, TOTAL_COMMENT_AMOUNT)
-        .parallel()
-        .forEach(number -> storyComments.add(comments.get(random.nextInt(comments.size() - 1))));
-
-    List<Image> imageLinks = imageRepository.findAll();
-    Image randomImage = imageLinks.get(random.nextInt(headlines.size() - 1));
+    Headline randomHeadline = headlineRepository.findRandomHeadline();
 
     return Story.builder()
         .title(randomHeadline.getTitle())
         .createdOn(randomHeadline.getDate())
-        .imageSrc(randomImage.getImageLink())
-        .comments(storyComments).build();
+        .imageSrc(imageRepository.findRandomImage().getImageLink())
+        .comments(commentRepository.findRandomComments(TOTAL_COMMENT_AMOUNT)).build();
 
   }
 
@@ -88,5 +76,13 @@ public class StoriesController {
   public void scrape() {
     scraper.scrape();
   }
+
+  @DeleteMapping
+  public void deleteData() {
+    commentRepository.deleteAll();
+    headlineRepository.deleteAll();
+    imageRepository.deleteAll();
+  }
+
 
 }
