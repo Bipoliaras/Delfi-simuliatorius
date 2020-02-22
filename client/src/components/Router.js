@@ -1,15 +1,14 @@
-// Code taken from different project, needs to be adapted
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import StorePicker from "./StorePicker";
-import App from "./App";
-import NotFound from "./NotFound";
-import React from "react";
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+import NewsGrid from '../components/NewsGrid';
+import NotFound from './NotFound';
 
 const Router = () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path="/" component={StorePicker} />
-      <Route exact path="/store/:storeId" component={App} />
+      <Route exact path='/' component={NewsGrid} />
+      {/* <Route exact path='/headline/:headlineId' component={App} /> */}
       <Route component={NotFound} />
     </Switch>
   </BrowserRouter>

@@ -1,11 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Router from './components/Router';
+import { ThemeProvider } from 'styled-components';
+import './index.css';
+import * as serviceWorker from './serviceWorker';
 
-render(<Router />, document.getElementById("root"));
-ReactDOM.render(<App />, document.getElementById("root"));
+const theme = {
+  blue: '#125688',
+  offwhite: '#fafafa',
+  lightgrey: '#EDEEED'
+};
+
+ReactDOM.render(
+  <ThemeProvider theme={theme}>
+    <Router />
+  </ThemeProvider>,
+  document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
