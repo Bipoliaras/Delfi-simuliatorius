@@ -26,8 +26,9 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -47,7 +48,6 @@
             <artifactId>json</artifactId>
             <version>20190722</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
