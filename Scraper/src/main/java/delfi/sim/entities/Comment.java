@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,9 +22,11 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
+    @NotEmpty
     @Column(name = "username", length = 16384)
     public String username;
 
+    @NotEmpty
     @Column(name = "comment_text", length = 16384)
     public String text;
 

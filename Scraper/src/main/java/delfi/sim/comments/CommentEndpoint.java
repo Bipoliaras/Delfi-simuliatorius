@@ -4,12 +4,13 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import delfi.sim.entities.Comment;
-import delfi.sim.entities.CommentRepository;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,16 +27,9 @@ public class CommentEndpoint {
   private ObjectMapper objectMapper = new ObjectMapper()
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-  private CommentRepository commentRepository;
-
   private Logger logger = LoggerFactory.getLogger(CommentEndpoint.class);
 
-  @Autowired
-  public void setCommentRepository(CommentRepository commentRepository) {
-    this.commentRepository = commentRepository;
-  }
-
-  public void scrapeComments(Integer articleId, CommentTypes commentType) {
+  public List<Comment> getComments(Integer articleId, CommentTypes commentType) {
 
     try {
 
@@ -64,16 +58,18 @@ public class CommentEndpoint {
 
       JsonNode jsonRoot = objectMapper.readTree(responseJson);
 
-      JsonNode comments = jsonRoot.get("data").get("getCommentsByArticleId").get("comments");
+      List<Comment> comments = new ArrayList<>();
 
-      comments.elements().forEachRemaining(element -> commentRepository.save(Comment.builder()
-          .username(element.get("subject").asText())
-          .text(element.get("content").asText())
-          .build()));
+      jsonRoot.get("data").get("getCommentsByArticleId").get("comments").elements().forEachRemaining(
+          element -> comments.add(Comment.builder().username(element.get("subject").asText()).text(element.get("subject").asText()).build())
+      );
 
+      return comments;
     } catch (Exception ex) {
       logger.error(ex.toString());
     }
+
+    return Collections.emptyList();
 
   }
 
