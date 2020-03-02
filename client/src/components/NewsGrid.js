@@ -1,6 +1,6 @@
-import React from "react";
-import GridFigure from "../components/GridFigure";
-import styled from "styled-components";
+import React from 'react';
+import GridFigure from '../components/GridFigure';
+import styled from 'styled-components';
 
 const Grid = styled.div`
   display: grid;
@@ -24,12 +24,12 @@ class NewsGrid extends React.Component {
   }
 
   componentDidMount() {
-    const corsUrl = "https://cors-anywhere.herokuapp.com/";
-    const endpointUrl = "http://31.220.53.74:8080/stories/";
+    const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+    const endpointUrl = 'http://31.220.53.74:8080/stories/';
     fetch(corsUrl + endpointUrl)
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(
-        result => {
+        (result) => {
           this.setState({
             isLoaded: true,
             items: result
@@ -38,7 +38,7 @@ class NewsGrid extends React.Component {
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
         // exceptions from actual bugs in components.
-        error => {
+        (error) => {
           this.setState({
             isLoaded: true,
             error

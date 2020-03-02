@@ -1,23 +1,43 @@
-import React from "react";
+import React from 'react';
+import styled from 'styled-components';
 
-import styled from "styled-components";
-import { Headline, StyledDate } from "./GridFigureStyles";
 const StyledFigure = styled.figure`
   margin: 2rem;
   padding: 2rem;
-  border: 1px solid ${props => props.theme.lightgray};
-  background: offwhite;
+  border: 1px solid ${(props) => props.theme.lightgray};
+  background: ${(props) => props.theme.offwhite};
   box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.03);
   position: relative;
 `;
 
 const Comment = styled.div`
-  border-bottom: 1px solid ${props => props.theme.lightgray};
+  border-bottom: 1px solid ${(props) => props.theme.lightgray};
   padding: 0.5rem 0;
   strong {
-    color: ${props => props.theme.blue};
+    color: ${(props) => props.theme.blue};
     margin-right: 5px;
   }
+`;
+
+const Headline = styled.h1`
+  font-size: 4.6rem;
+  font-weight: 50;
+  line-height: 5rem;
+  letter-spacing: 1px;
+  padding: 0 0 40px;
+  border-bottom: double #555;
+`;
+
+const StyledDate = styled.span`
+  background: ${(props) => props.theme.offwhite};
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+  margin: 0 0 20px 18px;
+  padding: 10px 12px 8px;
+  position: relative;
+  bottom: 45px;
 `;
 
 class GridFigure extends React.Component {
@@ -37,13 +57,13 @@ class GridFigure extends React.Component {
     );
   }
   render() {
-    const { title, imageSrc, comments } = this.props.data;
+    const { title, createdOn, imageSrc, comments } = this.props.data;
     return (
       <StyledFigure>
         <Headline>{title}</Headline>
-        <StyledDate>2019-01-19</StyledDate>
+        <StyledDate>{createdOn}</StyledDate>
         <div>
-          <img src={imageSrc} alg={" "}></img>
+          <img src={imageSrc} alt={' '}></img>
           {comments.map(this.renderComment)}
         </div>
       </StyledFigure>
