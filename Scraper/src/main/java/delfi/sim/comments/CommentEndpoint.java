@@ -3,11 +3,12 @@ package delfi.sim.comments;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import delfi.sim.entities.Comment;
+import delfi.sim.entities.comment.Comment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,9 +61,13 @@ public class CommentEndpoint {
 
       List<Comment> comments = new ArrayList<>();
 
-      jsonRoot.get("data").get("getCommentsByArticleId").get("comments").elements().forEachRemaining(
-          element -> comments.add(Comment.builder().username(element.get("subject").asText()).text(element.get("subject").asText()).build())
-      );
+      jsonRoot.get("data").get("getCommentsByArticleId").get("comments").elements()
+          .forEachRemaining(
+              element -> comments.add(Comment.builder()
+                  .username(element.get("subject").asText())
+                  .text(element.get("content").asText())
+                  .build())
+          );
 
       return comments;
     } catch (Exception ex) {
@@ -70,7 +75,6 @@ public class CommentEndpoint {
     }
 
     return Collections.emptyList();
-
   }
 
 

@@ -1,4 +1,4 @@
-package delfi.sim.entities;
+package delfi.sim.entities.image;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

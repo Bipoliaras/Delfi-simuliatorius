@@ -1,4 +1,4 @@
-package delfi.sim.entities;
+package delfi.sim.entities.comment;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

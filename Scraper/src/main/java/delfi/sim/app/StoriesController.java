@@ -1,14 +1,12 @@
 package delfi.sim.app;
 
-import delfi.sim.entities.Comment;
-import delfi.sim.entities.CommentRepository;
-import delfi.sim.entities.Headline;
-import delfi.sim.entities.HeadlineRepository;
-import delfi.sim.entities.Image;
-import delfi.sim.entities.ImageRepository;
-import delfi.sim.entities.Story;
+import delfi.sim.entities.comment.CommentRepository;
+import delfi.sim.entities.headline.Headline;
+import delfi.sim.entities.headline.HeadlineRepository;
+import delfi.sim.entities.image.ImageRepository;
+import delfi.sim.entities.story.InterestType;
+import delfi.sim.entities.story.Story;
 import delfi.sim.scraper.Scraper;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -34,6 +32,8 @@ public class StoriesController {
   private HeadlineRepository headlineRepository;
 
   private ImageRepository imageRepository;
+
+  private Random random = new Random();
 
   @Autowired
   public void setCommentRepository(CommentRepository commentRepository) {
@@ -65,6 +65,7 @@ public class StoriesController {
     Headline randomHeadline = headlineRepository.findRandomHeadline();
 
     return Story.builder()
+        .interest(random.nextInt(2) == 1 ? InterestType.HOT : InterestType.COLD)
         .title(randomHeadline.getTitle())
         .createdOn(randomHeadline.getDate())
         .imageSrc(imageRepository.findRandomImage().getImageLink())
