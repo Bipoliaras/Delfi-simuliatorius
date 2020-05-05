@@ -3,7 +3,6 @@ package simulator.persistence.entities.headline;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -18,15 +17,15 @@ import lombok.NoArgsConstructor;
 @Entity(name = "t_headline")
 public class Headline {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+  @Id
+  @GeneratedValue
+  private Long id;
 
-    @NotEmpty
-    @Column(name = "title", length = 16384)
-    private String title;
+  @NotEmpty
+  @Column(name = "title", length = 16384)
+  private String title;
 
-    @NotEmpty
-    @Column(name ="date", length = 16384)
-    private String date;
+  @NotEmpty
+  @Column(name = "date", length = 16384)
+  private String date;
 }

@@ -18,7 +18,6 @@ import simulator.scraper.Scraper;
 @Service
 public class StoryService {
 
-
   private Scraper scraper;
 
   private StoryRepository storyRepository;
