@@ -1,10 +1,11 @@
-package delfi.sim.entities;
+package delfi.sim.entities.comment;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,16 +15,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "t_headline")
-public class Headline {
+@Entity(name = "t_comment")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    public Long id;
 
-    @Column(name = "title", length = 16384)
-    private String title;
+    @NotEmpty
+    @Column(name = "username", length = 16384)
+    public String username;
 
-    @Column(name ="date", length = 16384)
-    private String date;
+    @NotEmpty
+    @Column(name = "comment_text", length = 16384)
+    public String text;
+
 }

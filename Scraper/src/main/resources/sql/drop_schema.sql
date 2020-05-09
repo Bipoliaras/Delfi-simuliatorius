@@ -1,3 +1,3 @@
-DELETE FROM comment;
-DELETE FROM headline;
-DELETE FROM image;
+DELETE FROM t_comment;
+DELETE FROM t_headline;
+DELETE FROM t_image;
