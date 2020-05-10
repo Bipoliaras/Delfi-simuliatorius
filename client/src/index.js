@@ -1,21 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Router from './components/Router';
-import { ThemeProvider } from 'styled-components';
-import './index.css';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import Router from "./components/Router";
+import {
+  createMuiTheme,
+  ThemeProvider,
+  responsiveFontSizes,
+} from "@material-ui/core/styles";
+import * as serviceWorker from "./serviceWorker";
 
-const theme = {
-  blue: '#125688',
-  offwhite: '#fafafa',
-  lightgrey: '#EDEEED'
-};
+let theme = createMuiTheme();
+theme = responsiveFontSizes(theme);
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     <Router />
   </ThemeProvider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

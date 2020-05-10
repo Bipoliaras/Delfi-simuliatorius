@@ -1,74 +1,65 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import CardMedia from "@material-ui/core/CardMedia";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
+import { CardActions, Box } from "@material-ui/core";
 
-const StyledFigure = styled.figure`
-  margin: 2rem;
-  padding: 2rem;
-  border: 1px solid ${(props) => props.theme.lightgray};
-  background: ${(props) => props.theme.offwhite};
-  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.03);
-  position: relative;
-`;
+const useStyles = makeStyles((theme) => ({
+  root: {
+    background: (props) => props.background,
+    color: (props) =>
+      props.interest === "HOT" ? "#fff" : theme.palette.text.primary,
+  },
+  comment: {
+    fontWeight: "bold",
+    color: theme.palette.primary.main,
+    "& span": {
+      fontWeight: "normal",
+      color: (props) =>
+        props.interest === "HOT" ? "#fff" : theme.palette.text.primary,
+    },
+  },
+  media: {
+    height: 0,
+    paddingTop: "56.25%", // 16:9
+  },
+}));
 
-const Comment = styled.div`
-  border-bottom: 1px solid ${(props) => props.theme.lightgray};
-  padding: 0.5rem 0;
-  strong {
-    color: ${(props) => props.theme.blue};
-    margin-right: 5px;
-  }
-`;
-
-const Headline = styled.h1`
-  font-size: 4.6rem;
-  font-weight: 50;
-  line-height: 5rem;
-  letter-spacing: 1px;
-  padding: 0 0 40px;
-  border-bottom: double #555;
-`;
-
-const StyledDate = styled.span`
-  background: ${(props) => props.theme.offwhite};
-  font-family: 'Georgia', serif;
-  font-style: italic;
-  font-size: 1.8rem;
-  line-height: 2.2rem;
-  margin: 0 0 20px 18px;
-  padding: 10px 12px 8px;
-  position: relative;
-  bottom: 45px;
-`;
-
-class GridFigure extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-  renderComment(comment, i) {
+function GridFigure(props) {
+  const { title, createdOn, imageSrc, comments } = props.article;
+  const classes = useStyles(props.article);
+  function renderComment(comment) {
     const { id, username, text } = comment;
     return (
-      <Comment key={id}>
-        <p>
-          <strong>{username}</strong>
+      <Box key={id}>
+        <Typography className={classes.comment} component="span">
+          {username}:&nbsp;
           <span dangerouslySetInnerHTML={{ __html: text }} />
-        </p>
-      </Comment>
+        </Typography>
+      </Box>
     );
   }
-  render() {
-    const { title, createdOn, imageSrc, comments } = this.props.data;
-    return (
-      <StyledFigure>
-        <Headline>{title}</Headline>
-        <StyledDate>{createdOn}</StyledDate>
-        <div>
-          <img src={imageSrc} alt={' '}></img>
-          {comments.map(this.renderComment)}
-        </div>
-      </StyledFigure>
-    );
-  }
+  return (
+    <Grid item xs={12} sm={6} lg={4}>
+      <Card className={classes.root}>
+        <CardHeader title={title} subheader={createdOn} />
+        <CardMedia
+          className={classes.media}
+          image={imageSrc}
+          title={imageSrc}
+        />
+        <CardContent children={comments.map(renderComment)}></CardContent>
+        <CardActions disableSpacing>
+          <Button size="small">Share</Button>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
 }
 
 export default GridFigure;
