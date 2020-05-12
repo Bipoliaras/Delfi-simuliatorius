@@ -1,61 +1,106 @@
-import React from "react";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import CardMedia from "@material-ui/core/CardMedia";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
-import { CardActions, Box } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import Comments from "./Comments";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    background: (props) => props.background,
-    color: (props) =>
-      props.interest === "HOT" ? "#fff" : theme.palette.text.primary,
-  },
-  comment: {
-    fontWeight: "bold",
-    color: theme.palette.primary.main,
-    "& span": {
-      fontWeight: "normal",
-      color: (props) =>
-        props.interest === "HOT" ? "#fff" : theme.palette.text.primary,
-    },
+  "@keyframes hotNews": {
+    "0%": { backgroundPosition: "0% 50%" },
+    "50%": { backgroundPosition: " 100% 50%" },
+    "100%": { backgroundPosition: "0% 50%" },
   },
   media: {
-    height: 0,
-    paddingTop: "56.25%", // 16:9
+    position: "relative",
+    paddingTop: "56.25%",
+  },
+  hot: {
+    //animation: `$hotNews 3s ease infinite`,
+    //background: `linear-gradient(270deg, ${theme.palette.secondary.dark}, ${theme.palette.secondary.light})`,
+    //backgroundSize: "400% 400%",
+    "& .MuiTag--ribbon": {
+      position: "absolute",
+      top: theme.spacing(2),
+      left: theme.spacing(2),
+      backgroundColor: theme.palette.secondary.main,
+      color: "#ffffff !important",
+      padding: "2px 8px",
+      boxShadow: "0 2px 12px 2px rgba(0,0,0,0.5)",
+      borderTopLeftRadius: 2,
+      borderBottomLeftRadius: 2,
+      "&:before, &:after": {
+        position: "absolute",
+        right: -16,
+        content: '" "',
+        borderLeft: `16px solid ${theme.palette.secondary.main}`,
+        //background: `linear-gradient(270deg, ${theme.palette.secondary.dark}, ${theme.palette.secondary.light})`,
+      },
+      "&:before": {
+        top: 0,
+        borderBottom: "14px solid transparent",
+      },
+      "&:after": {
+        bottom: 0,
+        borderTop: "14px solid transparent",
+      },
+      "& .MuiTypography-root": {
+        fontWeight: "bold",
+      },
+    },
   },
 }));
 
+// Add bold property to CardHeader title
+const StyledCardHeader = withStyles({
+  title: {
+    fontWeight: "bold",
+  },
+  subheader: {
+    color: "inherit",
+  },
+})(CardHeader);
+
 function GridFigure(props) {
-  const { title, createdOn, imageSrc, comments } = props.article;
-  const classes = useStyles(props.article);
-  function renderComment(comment) {
-    const { id, username, text } = comment;
-    return (
-      <Box key={id}>
-        <Typography className={classes.comment} component="span">
-          {username}:&nbsp;
-          <span dangerouslySetInnerHTML={{ __html: text }} />
-        </Typography>
-      </Box>
-    );
-  }
+  const { title, interest, createdOn, imageSrc, comments } = props.article;
+  const [animatedClass, setAnimatedClass] = useState("");
+  const classes = useStyles();
+  useEffect(() => {
+    const setCss = (interest) => {
+      if (interest !== "HOT") {
+        return;
+      }
+      setAnimatedClass("hot");
+    };
+    setCss(interest);
+  });
+
   return (
     <Grid item xs={12} sm={6} lg={4}>
-      <Card className={classes.root}>
-        <CardHeader title={title} subheader={createdOn} />
-        <CardMedia
-          className={classes.media}
-          image={imageSrc}
-          title={imageSrc}
-        />
-        <CardContent children={comments.map(renderComment)}></CardContent>
+      <Card variant="outlined" className={classes[animatedClass]}>
+        <StyledCardHeader title={title} subheader={createdOn} />
+        <CardMedia className={classes.media} image={imageSrc} title={imageSrc}>
+          <div className={"MuiTag--ribbon"}>
+            <Typography color={"inherit"} className={"MuiTypography-root"}>
+              {animatedClass.toLocaleUpperCase()}
+            </Typography>
+          </div>
+        </CardMedia>
+        <CardContent>
+          <Comments comments={comments}></Comments>
+        </CardContent>
         <CardActions disableSpacing>
-          <Button size="small">Share</Button>
+          <Button color={"primary"} size="medium">
+            Share
+          </Button>
         </CardActions>
       </Card>
     </Grid>

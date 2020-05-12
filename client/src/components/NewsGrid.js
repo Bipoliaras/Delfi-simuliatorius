@@ -8,8 +8,10 @@ function NewsGrid() {
 
   useEffect(() => {
     function fetchData() {
-      const endpointUrl = "http://31.220.53.74:8080/stories/";
-      fetch(endpointUrl)
+      const endpoint =
+        "https://ernio-api-nes-ernis-nemoka-pats.karolis.host/stories/";
+      const endpointUrl = "https://31.220.53.74:8080/stories/";
+      fetch(endpoint)
         .then((res) => res.json())
         .then(
           (result) => {
@@ -37,10 +39,6 @@ function NewsGrid() {
       <Box m={2}>
         <Grid container spacing={2}>
           {data.items.map((article, i) => {
-            article.interest === "HOT"
-              ? (article.background =
-                  "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)")
-              : (article.background = "");
             return <GridFigure article={article} key={i} />;
           })}
         </Grid>
