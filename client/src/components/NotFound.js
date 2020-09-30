@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../logo.svg';
-import styled, { keyframes } from 'styled-components';
+import React from "react";
+import { Link } from "react-router-dom";
+import logo from "../logo.svg";
+import styled, { keyframes } from "styled-components";
 
 const AppLogoSpin = (from, to) => keyframes`
   from {
@@ -39,11 +39,11 @@ const StyledNotFound = styled.div`
 function NotFound() {
   return (
     <StyledNotFound>
-      <header className='header'>
-        <img src={logo} className='logo' alt='logo' />
+      <header className="header">
+        <img src={logo} className="logo" alt="logo" />
         Path: {window.location.href} not found!
-        <span className='link'>
-          <Link to='/'>Go Home Brother</Link>
+        <span className="link">
+          <Link to="/">Go Home Brother</Link>
         </span>
       </header>
     </StyledNotFound>

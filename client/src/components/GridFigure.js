@@ -1,54 +1,110 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Comments from "./Comments";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+} from "@material-ui/core";
 
-import styled from "styled-components";
-import { Headline, StyledDate } from "./GridFigureStyles";
-const StyledFigure = styled.figure`
-  margin: 2rem;
-  padding: 2rem;
-  border: 1px solid ${props => props.theme.lightgray};
-  background: offwhite;
-  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.03);
-  position: relative;
-`;
+const useStyles = makeStyles((theme) => ({
+  "@keyframes hotNews": {
+    "0%": { backgroundPosition: "0% 50%" },
+    "50%": { backgroundPosition: " 100% 50%" },
+    "100%": { backgroundPosition: "0% 50%" },
+  },
+  media: {
+    position: "relative",
+    paddingTop: "56.25%",
+  },
+  hot: {
+    //animation: `$hotNews 3s ease infinite`,
+    //background: `linear-gradient(270deg, ${theme.palette.secondary.dark}, ${theme.palette.secondary.light})`,
+    //backgroundSize: "400% 400%",
+    "& .MuiTag--ribbon": {
+      position: "absolute",
+      top: theme.spacing(2),
+      left: theme.spacing(2),
+      backgroundColor: theme.palette.secondary.main,
+      color: "#ffffff !important",
+      padding: "2px 8px",
+      boxShadow: "0 2px 12px 2px rgba(0,0,0,0.5)",
+      borderTopLeftRadius: 2,
+      borderBottomLeftRadius: 2,
+      "&:before, &:after": {
+        position: "absolute",
+        right: -16,
+        content: '" "',
+        borderLeft: `16px solid ${theme.palette.secondary.main}`,
+        //background: `linear-gradient(270deg, ${theme.palette.secondary.dark}, ${theme.palette.secondary.light})`,
+      },
+      "&:before": {
+        top: 0,
+        borderBottom: "14px solid transparent",
+      },
+      "&:after": {
+        bottom: 0,
+        borderTop: "14px solid transparent",
+      },
+      "& .MuiTypography-root": {
+        fontWeight: "bold",
+      },
+    },
+  },
+}));
 
-const Comment = styled.div`
-  border-bottom: 1px solid ${props => props.theme.lightgray};
-  padding: 0.5rem 0;
-  strong {
-    color: ${props => props.theme.blue};
-    margin-right: 5px;
-  }
-`;
+// Add bold property to CardHeader title
+const StyledCardHeader = withStyles({
+  title: {
+    fontWeight: "bold",
+  },
+  subheader: {
+    color: "inherit",
+  },
+})(CardHeader);
 
-class GridFigure extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-  renderComment(comment, i) {
-    const { id, username, text } = comment;
-    return (
-      <Comment key={id}>
-        <p>
-          <strong>{username}</strong>
-          <span dangerouslySetInnerHTML={{ __html: text }} />
-        </p>
-      </Comment>
-    );
-  }
-  render() {
-    const { title, imageSrc, comments } = this.props.data;
-    return (
-      <StyledFigure>
-        <Headline>{title}</Headline>
-        <StyledDate>2019-01-19</StyledDate>
-        <div>
-          <img src={imageSrc} alg={" "}></img>
-          {comments.map(this.renderComment)}
-        </div>
-      </StyledFigure>
-    );
-  }
+function GridFigure(props) {
+  const { title, interest, createdOn, imageSrc, comments } = props.article;
+  const [animatedClass, setAnimatedClass] = useState("");
+  const classes = useStyles();
+  useEffect(() => {
+    const setCss = (interest) => {
+      if (interest !== "HOT") {
+        return;
+      }
+      setAnimatedClass("hot");
+    };
+    setCss(interest);
+  });
+
+  return (
+    <Grid item xs={12} sm={6} lg={4}>
+      <Card variant="outlined" className={classes[animatedClass]}>
+        <StyledCardHeader title={title} subheader={createdOn} />
+        <CardMedia className={classes.media} image={imageSrc} title={imageSrc}>
+          <div className={"MuiTag--ribbon"}>
+            <Typography color={"inherit"} className={"MuiTypography-root"}>
+              {animatedClass.toLocaleUpperCase()}
+            </Typography>
+          </div>
+        </CardMedia>
+        <CardContent>
+          <Comments comments={comments}></Comments>
+        </CardContent>
+        <CardActions disableSpacing>
+          <Button color={"primary"} size="medium">
+            Share
+          </Button>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
 }
 
 export default GridFigure;
