@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import simulator.persistence.entities.headline.Headline;
 import simulator.persistence.entities.story.InterestType;
 import simulator.persistence.entities.story.Story;
@@ -18,15 +20,15 @@ import simulator.scraper.Scraper;
 @Service
 public class StoryService {
 
-  private Scraper scraper;
+  private final Scraper scraper;
 
-  private StoryRepository storyRepository;
+  private final StoryRepository storyRepository;
 
-  private HeadlineRepository headlineRepository;
+  private final HeadlineRepository headlineRepository;
 
-  private CommentRepository commentRepository;
+  private final CommentRepository commentRepository;
 
-  private ImageRepository imageRepository;
+  private final ImageRepository imageRepository;
 
   @Autowired
   public StoryService(Scraper scraper, StoryRepository storyRepository,
@@ -39,12 +41,13 @@ public class StoryService {
     this.imageRepository = imageRepository;
   }
 
-  public List<Story> getStories() {
-    return storyRepository.findRandomStories(10);
+  public List<Story> getStories(Long limit) {
+    return storyRepository.findRandomStories(limit);
   }
 
   public Story getStoryById(Long id) {
-    return storyRepository.findById(id).get();
+    return storyRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
+        HttpStatus.NOT_FOUND, "Story not found", null));
   }
 
   @Scheduled(fixedDelay = 86400000, initialDelay = 1000)

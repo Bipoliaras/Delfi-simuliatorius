@@ -10,6 +10,6 @@ import simulator.persistence.entities.story.Story;
 public interface StoryRepository extends JpaRepository<Story, Long> {
 
   @Query(value = "SELECT * FROM t_story ORDER BY random() LIMIT ?1", nativeQuery = true)
-  List<Story> findRandomStories(Integer limit);
+  List<Story> findRandomStories(Long limit);
 
 }

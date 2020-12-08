@@ -8,7 +8,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import simulator.comments.CommentEndpoint;
 import simulator.comments.CommentTypes;
@@ -22,15 +21,24 @@ import simulator.persistence.repositories.ImageRepository;
 @Service
 public class Scraper {
 
-  private HeadlineRepository headlineRepository;
+  private final HeadlineRepository headlineRepository;
 
-  private ImageRepository imageRepository;
+  private final ImageRepository imageRepository;
 
-  private CommentRepository commentRepository;
+  private final CommentRepository commentRepository;
 
-  private CommentEndpoint commentEndpoint;
+  private final CommentEndpoint commentEndpoint;
 
-  private final Logger logger = LoggerFactory.getLogger(Scraper.class);
+  private static final Logger logger = LoggerFactory.getLogger(Scraper.class);
+
+  public Scraper(HeadlineRepository headlineRepository,
+      ImageRepository imageRepository,
+      CommentRepository commentRepository, CommentEndpoint commentEndpoint) {
+    this.headlineRepository = headlineRepository;
+    this.imageRepository = imageRepository;
+    this.commentRepository = commentRepository;
+    this.commentEndpoint = commentEndpoint;
+  }
 
   public void scrape() {
     Arrays.stream(WebsiteLinks.values()).forEach(link -> scrapeLink(link.getUrl()));
@@ -99,26 +107,6 @@ public class Scraper {
       logger.error(ex.toString());
     }
 
-  }
-
-  @Autowired
-  public void setHeadlineRepository(HeadlineRepository headlineRepository) {
-    this.headlineRepository = headlineRepository;
-  }
-
-  @Autowired
-  public void setImageRepository(ImageRepository imageRepository) {
-    this.imageRepository = imageRepository;
-  }
-
-  @Autowired
-  public void setCommentEndpoint(CommentEndpoint commentEndpoint) {
-    this.commentEndpoint = commentEndpoint;
-  }
-
-  @Autowired
-  public void setCommentRepository(CommentRepository commentRepository) {
-    this.commentRepository = commentRepository;
   }
 
 }
