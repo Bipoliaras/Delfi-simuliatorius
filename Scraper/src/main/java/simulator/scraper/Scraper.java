@@ -1,7 +1,7 @@
 package simulator.scraper;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.jsoup.Jsoup;
@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 import simulator.comments.CommentEndpoint;
 import simulator.comments.CommentTypes;
 import simulator.persistence.entities.headline.Headline;
@@ -41,7 +42,9 @@ public class Scraper {
   }
 
   public void scrape() {
-    Arrays.stream(WebsiteLinks.values()).forEach(link -> scrapeLink(link.getUrl()));
+    Arrays.stream(WebsiteLinks.values())
+        .map(WebsiteLinks::getUrl)
+        .forEach(this::scrapeLink);
   }
 
   private void scrapeLink(String websiteLink) {
@@ -49,42 +52,31 @@ public class Scraper {
 
       Document doc = Jsoup.connect(websiteLink).get();
 
-      List<String> links = new ArrayList<>();
-
-      doc.select("a[href]")
+      List<String> links = doc.select("a[href]")
           .stream()
           .map(element -> element.attr("href"))
           .filter(link -> link.contains("&com=1"))
           .map(link -> link.replace("&com=1", ""))
-          .forEach(link ->
-          {
-            links.add(link);
-            scrapeHeadlinesAndImages(link);
-          });
+          .peek(this::scrapeHeadlinesAndImages)
+          .collect(Collectors.toList());
 
-      links.stream().map(
-          link -> link.substring(link.indexOf('=') + 1)
-      ).forEach(this::saveCommentsFromLink);
+      links.stream()
+          .map(link -> UriComponentsBuilder.fromUriString(link).build().getQueryParams())
+          .map(parameterMap -> parameterMap.get("id"))
+          .flatMap(Collection::stream)
+          .map(Long::valueOf)
+          .forEach(this::saveCommentsFromLink);
 
     } catch (Exception ex) {
       logger.error(ex.toString());
     }
   }
 
-  private void saveCommentsFromLink(String link) {
+  private void saveCommentsFromLink(Long articleId) {
     commentRepository
-        .saveAll(commentEndpoint.getComments(Integer.parseInt(link), CommentTypes.ANONYMOUS_MAIN)
-            .stream().filter(
-                comment -> !comment.getText().equals("null") && !comment.getUsername()
-                    .equals("null"))
-            .collect(
-                Collectors.toList()));
+        .saveAll(commentEndpoint.getComments(articleId, CommentTypes.ANONYMOUS_MAIN));
     commentRepository
-        .saveAll(commentEndpoint.getComments(Integer.parseInt(link), CommentTypes.REGISTERED_MAIN)
-            .stream().filter(
-                comment -> !comment.getText().equals("null") && !comment.getUsername()
-                    .equals("null")).collect(
-                Collectors.toList()));
+        .saveAll(commentEndpoint.getComments(articleId, CommentTypes.REGISTERED_MAIN));
   }
 
 
@@ -94,14 +86,12 @@ public class Scraper {
 
       Document doc = Jsoup.connect(link).get();
 
-      headlineRepository.save(Headline.builder()
-          .title(doc.select("h1").text())
-          .date(doc.select("div.source-date").text())
-          .build());
+      headlineRepository.save(new Headline(doc.select("h1").text(),
+          doc.select("div.source-date").text()));
 
       doc.select("img[width=\"880\"],img[height=\"550\"]").stream()
           .map(element -> element.attr("src"))
-          .forEach(imageLink -> imageRepository.save(Image.builder().imageLink(imageLink).build()));
+          .forEach(imageLink -> imageRepository.save(new Image(imageLink)));
 
     } catch (Exception ex) {
       logger.error(ex.toString());

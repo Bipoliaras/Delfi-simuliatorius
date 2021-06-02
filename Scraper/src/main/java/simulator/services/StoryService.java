@@ -3,6 +3,8 @@ package simulator.services;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,6 +32,8 @@ public class StoryService {
 
   private final ImageRepository imageRepository;
 
+  private final Logger logger = LoggerFactory.getLogger(StoryService.class);
+
   @Autowired
   public StoryService(Scraper scraper, StoryRepository storyRepository,
       HeadlineRepository headlineRepository, CommentRepository commentRepository,
@@ -50,7 +54,7 @@ public class StoryService {
         HttpStatus.NOT_FOUND, "Story not found", null));
   }
 
-  @Scheduled(fixedDelay = 86400000, initialDelay = 1000)
+  @Scheduled(fixedDelay = 86400000, initialDelay = 10000)
   public void createStories() {
     //delete all entries from the database
     headlineRepository.deleteAll();
@@ -75,13 +79,11 @@ public class StoryService {
   private Story getRandomStory() {
     Headline randomHeadline = headlineRepository.getRandomHeadline();
 
-    return Story.builder()
-        .comments(commentRepository.findRandomComments(7))
-        .createdOn(randomHeadline.getDate())
-        .imageSrc(imageRepository.findRandomImage().getImageLink())
-        .interest(getInterestType())
-        .title(randomHeadline.getTitle())
-        .build();
+    return new Story(randomHeadline.getTitle(),
+        randomHeadline.getDate(),
+        imageRepository.findRandomImage().getImageLink(),
+        getInterestType(),
+        commentRepository.findRandomComments(7));
   }
 
 

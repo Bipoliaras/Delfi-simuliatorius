@@ -5,15 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity(name = "t_image")
 public class Image {
 
@@ -25,4 +17,17 @@ public class Image {
   @Column(name = "image_link", length = 16384)
   private String imageLink;
 
+  public Image() { }
+
+  public String getImageLink() {
+    return imageLink;
+  }
+
+  public void setImageLink(String imageLink) {
+    this.imageLink = imageLink;
+  }
+
+  public Image(String imageLink) {
+    this.imageLink = imageLink;
+  }
 }

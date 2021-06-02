@@ -1,0 +1,33 @@
+server:
+  port: 9000
+
+
+spring:
+  application:
+    name: delfi-simulator
+  jpa:
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: jdbc:h2:mem:delfi
+    driver-class-name: org.h2.Driver
+    username: Delfinariumas
+    password: Delfinariumas4927
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: health
+      base-path: "/sys"
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+

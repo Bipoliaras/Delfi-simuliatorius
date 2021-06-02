@@ -5,15 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Entity(name = "t_comment")
 public class Comment {
 
@@ -28,5 +21,28 @@ public class Comment {
   @NotEmpty
   @Column(name = "comment_text", length = 16384)
   public String text;
+
+  public Comment() { }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  public Comment(String username, String text) {
+    this.username = username;
+    this.text = text;
+  }
 
 }
