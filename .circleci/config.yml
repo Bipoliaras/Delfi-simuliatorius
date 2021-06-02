@@ -1,0 +1,34 @@
+version: 2.0
+
+jobs:
+  test:
+    docker:
+      - image: maven:3.8.1-openjdk-16
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      - cd: Scraper
+      - run: ./mvnw test
+
+  build:
+    docker:
+      - image: maven:3.8.1-openjdk-16
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      - cd: Scraper
+      - run: mvn -Dmaven.test.skip=true package
+
+workflows:
+  version: 2
+
+  build-then-test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
