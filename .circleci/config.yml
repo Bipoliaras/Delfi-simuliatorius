@@ -5,6 +5,9 @@ jobs:
   test:
     docker:
       - image: circleci/openjdk:16-jdk-buster
+        auth:
+          username: ernesem
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - run: cd Scraper && mvn test
