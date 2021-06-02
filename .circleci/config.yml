@@ -10,7 +10,7 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
-      - cd: Scraper
+      - run: cd Scraper
       - run: ./mvnw test
 
   build:
@@ -21,7 +21,7 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
-      - cd: Scraper
+      - run: cd Scraper
       - run: mvn -Dmaven.test.skip=true package
 
 workflows:
