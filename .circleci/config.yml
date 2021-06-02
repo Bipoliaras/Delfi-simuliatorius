@@ -4,14 +4,14 @@ version: 2.0
 jobs:
   test:
     docker:
-      - image: maven:3.8.1-openjdk-16
+      - image: circleci/openjdk:16-jdk-buster
     steps:
       - checkout
       - run: cd Scraper && mvn test
 
   build:
     docker:
-      - image: maven:3.8.1-openjdk-16
+      - image: circleci/openjdk:16-jdk-buster
     steps:
       - checkout
       - run: cd Scraper && mvn clean install
