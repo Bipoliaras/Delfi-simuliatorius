@@ -11,6 +11,7 @@ jobs:
     steps:
       - checkout
       - run: cd Scraper
+      - run: ls
       - run: mvn test
 
   build:
@@ -22,7 +23,8 @@ jobs:
     steps:
       - checkout
       - run: cd Scraper
-      - run: mvn -Dmaven.test.skip=true package
+      - run: ls
+      - run: mvn package
 
 workflows:
   version: 2
