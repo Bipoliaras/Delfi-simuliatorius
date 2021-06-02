@@ -14,7 +14,7 @@ jobs:
       - image: maven:3.8.1-openjdk-16
     steps:
       - checkout
-      - run: cd Scraper && mvn package
+      - run: cd Scraper && mvn clean install
 
 
 workflows:
