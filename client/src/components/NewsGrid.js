@@ -9,8 +9,7 @@ function NewsGrid() {
   useEffect(() => {
     function fetchData() {
       const endpoint =
-        "https://ernio-api-nes-ernis-nemoka-pats.karolis.host/stories/";
-      const endpointUrl = "https://31.220.53.74:8080/stories/";
+        "http://localhost:9000/stories";
       fetch(endpoint)
         .then((res) => res.json())
         .then(

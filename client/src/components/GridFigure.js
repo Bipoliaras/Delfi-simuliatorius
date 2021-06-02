@@ -9,7 +9,6 @@ import {
   CardActions,
   Button,
   Grid,
-  Paper,
   Typography,
 } from "@material-ui/core";
 
