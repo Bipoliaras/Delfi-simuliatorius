@@ -10,9 +10,7 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
-      - run: cd Scraper
-      - run: ls
-      - run: mvn test
+      - run: cd Scraper && mvn test
 
   build:
     docker:
@@ -22,9 +20,7 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
-      - run: cd Scraper
-      - run: ls
-      - run: mvn package
+      - run: cd Scraper && mvn package
 
 workflows:
   version: 2
