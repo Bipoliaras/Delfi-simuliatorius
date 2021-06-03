@@ -24,10 +24,12 @@ management:
     enabled-by-default: false
     web:
       exposure:
-        include: health
+        include: health,prometheus
       base-path: "/sys"
   endpoint:
     health:
       show-details: always
+      enabled: true
+    prometheus:
       enabled: true
 
