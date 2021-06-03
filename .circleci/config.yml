@@ -10,8 +10,8 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
-      - run: docker ps
       - run: cd Scraper && mvn test
+      - run: cd Scraper && docker build . && docker push ernesem/delfinariumas:latest
 
   build:
     docker:
@@ -21,8 +21,8 @@ jobs:
             password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
-      - run: docker ps
-      - run: cd Scraper && mvn clean install
+      - run: cd Scraper && mvn clean install 
+      - run: cd Scraper && docker build . && docker push ernesem/delfinariumas:latest
 
 
 workflows:
