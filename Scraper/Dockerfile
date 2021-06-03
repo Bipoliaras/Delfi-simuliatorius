@@ -1,4 +1,5 @@
-FROM openjdk:15-alpine
+FROM openjdk:16-jdk-buster
 VOLUME /tmp
-COPY target/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+ARG JAR_FILE
+COPY target/${JAR_FILE} scraper.jar
+ENTRYPOINT ["java","-jar","/scraper.jar"]
