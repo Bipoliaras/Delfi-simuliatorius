@@ -21,14 +21,9 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run: 
-          command: |
-            echo "$DOCKERHUB_PASSWORD" | docker login -u ernesem --password-stdin
-            cd Scraper && mvn clean install
-            docker build .
-            docker push ernesem/delfinariumas:latest
-
-
+      - run: echo "$DOCKERHUB_PASSWORD" | docker login -u ernesem --password-stdin
+      - run: cd Scraper && mvn clean install
+            
 workflows:
   version: 2
 
