@@ -84,8 +84,6 @@
                 <configuration>
                     <repository>ernesem/delfinariumas</repository>
                     <tag>${project.version}</tag>
-                    <username>ernesem</username>
-                    <password>${env.DOCKER_PASSWORD}</password>
                     <buildArgs>
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
