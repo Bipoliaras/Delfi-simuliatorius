@@ -10,9 +10,7 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
-      - setup_remote_docker
       - run: cd Scraper && mvn test
-      - run: cd Scraper && docker build . && docker push ernesem/delfinariumas:latest
 
   build:
     docker:
