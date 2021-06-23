@@ -83,8 +83,7 @@ public class CommentEndpoint {
   }
 
   private boolean isValidComment(JsonNode comment) {
-    return !comment.get("subject").asText().equals("null") || !comment.get("content").asText()
-        .equals("null");
+    return !comment.get("subject").asText().equals("null") || !comment.get("content").asText().equals("null");
   }
 
 

@@ -97,19 +97,66 @@
             </executions>
           </plugin>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <argLine>-Xmx2048m -Xss1m -Dfile.encoding=${project.build.sourceEncoding}
+                ${jacoco.agent.argLine}
+              </argLine>
+              <includes>
+                <include>**IT.java</include>
+                <include>**Tests.java</include>
+              </includes>
+            </configuration>
+          </plugin>
+          <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.7</version>
+            <configuration>
+              <excludes>
+                <exclude>**/markov/**</exclude>
+                <exclude>**/scraper/**</exclude>
+                <exclude>**/comments/**</exclude>
+                <exclude>**/Application*</exclude>
+                <exclude>**/Constants*</exclude>
+              </excludes>
+              <rules>
+                <rule>
+                  <element>CLASS</element>
+                  <limits>
+                    <limit>
+                      <counter>CLASS</counter>
+                      <value>MISSEDCOUNT</value>
+                      <maximum>0</maximum>
+                    </limit>
+                    <limit>
+                      <counter>LINE</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.80</minimum>
+                    </limit>
+                    <limit>
+                      <counter>BRANCH</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.80</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+              <propertyName>jacoco.agent.argLine</propertyName>
+            </configuration>
             <executions>
               <execution>
+                <id>prepare-arguments</id>
                 <goals>
                   <goal>prepare-agent</goal>
                 </goals>
               </execution>
               <execution>
-                <id>report</id>
-                <phase>prepare-package</phase>
+                <id>test-coverage</id>
+                <phase>test</phase>
                 <goals>
+                  <goal>check</goal>
                   <goal>report</goal>
                 </goals>
               </execution>

@@ -24,11 +24,11 @@ public class Image {
     return imageLink;
   }
 
-  public void setImageLink(String imageLink) {
+  public Image(String imageLink) {
     this.imageLink = imageLink;
   }
 
-  public Image(String imageLink) {
-    this.imageLink = imageLink;
+  public Long getId() {
+    return id;
   }
 }

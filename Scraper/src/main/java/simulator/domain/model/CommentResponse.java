@@ -5,6 +5,8 @@ import simulator.domain.entity.Comment;
 
 public class CommentResponse {
 
+  public CommentResponse() {}
+
   public CommentResponse(List<Comment> comments) {
     this.comments = comments;
   }

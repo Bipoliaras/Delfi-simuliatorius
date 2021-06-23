@@ -1,6 +1,8 @@
 package simulator;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.List;
@@ -37,7 +39,9 @@ class StoriesIT extends BaseIT {
 
     storyRepository.saveAll(
         List.of(
-            new Story("asd", "asd", "asd", InterestType.COLD, comments)
+            new Story("Hot story", "2020-01-19", "http://imgur.com/5151",
+                InterestType.COLD,
+                comments)
         )
     );
 
@@ -46,10 +50,35 @@ class StoriesIT extends BaseIT {
   @Test
   void givenStories_whenGetStories_ok() {
 
-    RestAssured
+    Story[] stories = RestAssured
         .given()
         .accept(ContentType.JSON)
         .get("/stories")
+        .then()
+        .log()
+        .all()
+        .statusCode(200)
+        .extract()
+        .as(Story[].class);
+
+    Story story = stories[0];
+
+    assertThat(story.getInterest()).isEqualTo(InterestType.COLD);
+    assertThat(story.getTitle()).isEqualTo("Hot story");
+    assertThat(story.getCreatedOn()).isEqualTo("2020-01-19");
+    assertThat(story.getImageSrc()).isEqualTo("http://imgur.com/5151");
+
+  }
+
+  @Test
+  void givenStories_whenGetStoryById_ok() {
+
+    Story story = storyRepository.findAll().get(0);
+
+    RestAssured
+        .given()
+        .accept(ContentType.JSON)
+        .get("/stories/{id}", story.getId())
         .then()
         .log()
         .all()
