@@ -8,7 +8,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-      - run: cd Scraper && mvn clean install -P COMMON,DOCKER
+      - run: cd Scraper && mvn clean install -P INITIAL,DOCKER
       - run: cd Scraper/target && ls
       - run: cd Scraper && bash <(curl -s https://codecov.io/bash) -t "$CODECOV_TOKEN" -f target/site/jacoco/jacoco.xml
 
