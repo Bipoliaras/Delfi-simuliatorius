@@ -1,4 +1,4 @@
-package simulator.services;
+package simulator.service;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,13 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import simulator.persistence.entities.headline.Headline;
-import simulator.persistence.entities.story.InterestType;
-import simulator.persistence.entities.story.Story;
-import simulator.persistence.repositories.CommentRepository;
-import simulator.persistence.repositories.HeadlineRepository;
-import simulator.persistence.repositories.ImageRepository;
-import simulator.persistence.repositories.StoryRepository;
+import simulator.Constants.InterestType;
+import simulator.domain.entity.Story;
+import simulator.repository.CommentRepository;
+import simulator.repository.HeadlineRepository;
+import simulator.repository.ImageRepository;
+import simulator.repository.StoryRepository;
 import simulator.scraper.Scraper;
 
 @Service
@@ -45,7 +44,7 @@ public class StoryService {
     this.imageRepository = imageRepository;
   }
 
-  public List<Story> getStories(Long limit) {
+  public List<Story> getStories(int limit) {
     return storyRepository.findRandomStories(limit);
   }
 
@@ -56,19 +55,27 @@ public class StoryService {
 
   @Scheduled(fixedDelay = 86400000, initialDelay = 10000)
   public void createStories() {
+    logger.info("Deleting old entries");
+
     //delete all entries from the database
     headlineRepository.deleteAll();
     storyRepository.deleteAll();
     commentRepository.deleteAll();
     imageRepository.deleteAll();
 
+    logger.info("Scraping new entries");
+
     //scrape new ones
     scraper.scrape();
+
+    logger.info("Generating new stories");
 
     //create and save stories
     IntStream.range(0, 500).parallel()
         .mapToObj(number -> getRandomStory())
         .forEach(storyRepository::save);
+
+    logger.info("Stories generated");
 
   }
 
@@ -77,7 +84,7 @@ public class StoryService {
   }
 
   private Story getRandomStory() {
-    Headline randomHeadline = headlineRepository.getRandomHeadline();
+    var randomHeadline = headlineRepository.getRandomHeadline();
 
     return new Story(randomHeadline.getTitle(),
         randomHeadline.getDate(),

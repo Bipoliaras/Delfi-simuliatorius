@@ -15,7 +15,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import simulator.persistence.entities.comment.Comment;
+import simulator.Constants.CommentTypes;
+import simulator.domain.entity.Comment;
 
 @Service
 public class CommentEndpoint {
@@ -82,7 +83,8 @@ public class CommentEndpoint {
   }
 
   private boolean isValidComment(JsonNode comment) {
-    return !comment.get("subject").asText().equals("null") || !comment.get("content").asText().equals("null");
+    return !comment.get("subject").asText().equals("null") || !comment.get("content").asText()
+        .equals("null");
   }
 
 

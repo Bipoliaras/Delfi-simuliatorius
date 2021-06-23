@@ -1,4 +1,4 @@
-package simulator.persistence.entities.headline;
+package simulator.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +22,8 @@ public class Headline {
   @Column(name = "date", length = 16384)
   private String date;
 
-  public Headline() { }
+  public Headline() {
+  }
 
   public String getTitle() {
     return title;

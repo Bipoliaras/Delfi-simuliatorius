@@ -1,4 +1,4 @@
-package simulator.app;
+package simulator.controller;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import simulator.persistence.entities.story.Story;
-import simulator.services.StoryService;
+import simulator.domain.entity.Story;
+import simulator.service.StoryService;
 
 
 @RestController
@@ -21,7 +21,8 @@ public class StoriesController {
   }
 
   @GetMapping
-  public List<Story> getStories(@RequestParam(name = "limit", required = false) Long limit) {
+  public List<Story> getStories(
+      @RequestParam(name = "limit", required = false, defaultValue = "20") int limit) {
     return storyService.getStories(limit);
   }
 

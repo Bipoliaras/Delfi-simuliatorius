@@ -10,13 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
+import simulator.Constants.CommentTypes;
+import simulator.Constants.WebsiteLinks;
 import simulator.comments.CommentEndpoint;
-import simulator.comments.CommentTypes;
-import simulator.persistence.entities.headline.Headline;
-import simulator.persistence.entities.image.Image;
-import simulator.persistence.repositories.CommentRepository;
-import simulator.persistence.repositories.HeadlineRepository;
-import simulator.persistence.repositories.ImageRepository;
+import simulator.domain.entity.Headline;
+import simulator.domain.entity.Image;
+import simulator.repository.CommentRepository;
+import simulator.repository.HeadlineRepository;
+import simulator.repository.ImageRepository;
 
 
 @Service

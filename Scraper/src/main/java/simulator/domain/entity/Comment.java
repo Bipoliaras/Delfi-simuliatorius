@@ -1,4 +1,4 @@
-package simulator.persistence.entities.comment;
+package simulator.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +22,8 @@ public class Comment {
   @Column(name = "comment_text", length = 16384)
   public String text;
 
-  public Comment() { }
+  public Comment() {
+  }
 
   public String getUsername() {
     return username;

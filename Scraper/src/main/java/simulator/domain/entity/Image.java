@@ -1,4 +1,4 @@
-package simulator.persistence.entities.image;
+package simulator.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +17,8 @@ public class Image {
   @Column(name = "image_link", length = 16384)
   private String imageLink;
 
-  public Image() { }
+  public Image() {
+  }
 
   public String getImageLink() {
     return imageLink;

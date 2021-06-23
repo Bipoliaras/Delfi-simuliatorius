@@ -1,7 +1,7 @@
-package simulator.comments;
+package simulator.domain.model;
 
 import java.util.List;
-import simulator.persistence.entities.comment.Comment;
+import simulator.domain.entity.Comment;
 
 public class CommentResponse {
 
@@ -10,7 +10,6 @@ public class CommentResponse {
   }
 
   private List<Comment> comments;
-
 
   public List<Comment> getComments() {
     return comments;

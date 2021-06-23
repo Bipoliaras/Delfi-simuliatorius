@@ -1,9 +1,9 @@
-package simulator.comments;
+package simulator.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-import simulator.persistence.entities.comment.Comment;
-import simulator.persistence.repositories.CommentRepository;
+import simulator.domain.entity.Comment;
+import simulator.repository.CommentRepository;
 
 @Service
 public class CommentService {

@@ -1,9 +1,9 @@
-package simulator.persistence.repositories;
+package simulator.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import simulator.persistence.entities.headline.Headline;
+import simulator.domain.entity.Headline;
 
 @Repository
 public interface HeadlineRepository extends JpaRepository<Headline, Long> {

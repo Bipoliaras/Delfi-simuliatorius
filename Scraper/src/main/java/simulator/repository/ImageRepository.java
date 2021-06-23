@@ -1,8 +1,8 @@
-package simulator.persistence.repositories;
+package simulator.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import simulator.persistence.entities.image.Image;
+import simulator.domain.entity.Image;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
